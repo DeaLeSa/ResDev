@@ -31,7 +31,7 @@ public class CategorieController {
         return categorie.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PostMapping(value = "/save", name = "_save")
+    @PostMapping(value = "/create", name = "_create")
     public ResponseEntity<Optional<Categorie>> saveCategorie(@RequestBody Categorie categorie) {
         Optional<Categorie> savedCategorie = categorieService.saveCategorie(categorie);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedCategorie);
