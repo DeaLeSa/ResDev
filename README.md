@@ -41,6 +41,20 @@ Le projet utilise les dépendances suivantes :
 - Spring Boot Starter Test pour les tests unitaires
 - Apache POI pour la manipulation des fichiers Excel
 
+## Méthodes
+
+| Classe | Type | URL | Description |
+| --- | --- | --- | --- |
+| RessourceController | GET  | /api/v1/ressources/all | Récupère toutes les ressources |
+| RessourceController | GET  | /api/v1/ressources/{id} | Récupère une ressource par son ID |
+| RessourceController | POST | /api/v1/ressources/create | Enregistre une nouvelle ressource |
+| RessourceController | POST | /api/v1/ressources/update/{id} | Met à jour une ressource existante |
+| RessourceController | POST | /api/v1/ressources/delete/{id} | Supprime une ressource existante |
+| RessourceController | POST | /api/v1/ressources/import-file | Importe une liste de ressources depuis un fichier Excel |
+| CategorieController |	GET	 | /api/v1/categories/all | Récupère toutes les catégories |
+| CategorieController | GET	 | /api/v1/categories/{id} | Récupère une catégorie par son ID |
+| CategorieController	| POST | /api/v1/categories/create | Enregistre une nouvelle catégorie |
+
 ## Contributions
 
 Les contributions sont les bienvenues ! N'hésitez pas à soumettre une pull request ou à ouvrir une issue sur Github.
