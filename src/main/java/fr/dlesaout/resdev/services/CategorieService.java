@@ -18,7 +18,7 @@ public class CategorieService {
         this.categorieRepository = categorieRepository;
     }
 
-    public List<Categorie> searchAllCategorie() {
+    public List<Categorie> searchAllCategories() {
         return categorieRepository.findAll();
     }
 

@@ -1,6 +1,8 @@
 package fr.dlesaout.resdev.services;
 
+import fr.dlesaout.resdev.entities.Etat;
 import fr.dlesaout.resdev.entities.Ressource;
+import fr.dlesaout.resdev.repositories.EtatRepository;
 import fr.dlesaout.resdev.repositories.RessourceRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -13,9 +15,12 @@ import java.util.Optional;
 public class RessourceService {
 
     private final RessourceRepository ressourceRepository;
+    private final EtatRepository etatRepository;
 
-    public RessourceService(RessourceRepository ressourceRepository) {
+    public RessourceService(RessourceRepository ressourceRepository,
+                            EtatRepository etatRepository) {
         this.ressourceRepository = ressourceRepository;
+        this.etatRepository = etatRepository;
     }
 
     public ResponseEntity<List<Ressource>> searchAllRessources() {
@@ -46,6 +51,7 @@ public class RessourceService {
         ) {
             return ResponseEntity.badRequest().build();
         }
+
         Ressource newRessource = Ressource.builder()
                 .nom(ressource.getNom())
                 .url(ressource.getUrl())
@@ -53,6 +59,10 @@ public class RessourceService {
                 .utilisation(ressource.getUtilisation())
                 .categories(ressource.getCategories())
                 .build();
+
+        Optional<Etat> defaultEtat = Optional.ofNullable(etatRepository.findEtatByNom("Enregistrée"));
+        defaultEtat.ifPresent(newRessource::setEtat);
+
         ressourceRepository.save(newRessource);
         return ResponseEntity.ok(newRessource);
     }
@@ -60,7 +70,7 @@ public class RessourceService {
     @Transactional
     public ResponseEntity<Ressource> updateRessource(Integer id, Ressource ressource) {
         Optional<Ressource> ressourceToUpdate = ressourceRepository.findById(id);
-        if(ressourceToUpdate.isEmpty() || ressource == null) {
+        if (ressourceToUpdate.isEmpty() || ressource == null) {
             return ResponseEntity.badRequest().build();
         }
         Ressource updatedRessource = Ressource.builder()
@@ -70,6 +80,7 @@ public class RessourceService {
                 .description(ressource.getDescription())
                 .utilisation(ressource.getUtilisation())
                 .categories(ressource.getCategories())
+                .etat(ressource.getEtat())
                 .build();
         Ressource savedRessource = ressourceRepository.save(updatedRessource);
         return ResponseEntity.ok(savedRessource);

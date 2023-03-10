@@ -1,5 +1,6 @@
 package fr.dlesaout.resdev.controllers;
 
+import fr.dlesaout.resdev.entities.Categorie;
 import fr.dlesaout.resdev.entities.Ressource;
 import fr.dlesaout.resdev.services.RessourceService;
 import org.apache.poi.ss.usermodel.Row;
@@ -56,6 +57,7 @@ public class RessourceController {
     public ResponseEntity<List<Ressource>> importResources(@RequestParam("file") MultipartFile file) {
         try {
             List<Ressource> ressources = new ArrayList<>();
+            List<Categorie> categories = new ArrayList<>();
 
             // Utilise Apache POI pour lire le contenu du fichier Excel
             Workbook workbook = WorkbookFactory.create(file.getInputStream());
@@ -69,12 +71,12 @@ public class RessourceController {
                         .url(row.getCell(2).getStringCellValue())
                         .description(row.getCell(3).getStringCellValue())
                         .utilisation(row.getCell(4).getStringCellValue())
+                        .categories(categories)
                         .build();
                 System.out.println(ressource);
 
                 // Enregistre la ressource dans la base de données en utilisant le service approprié
                 ressourceService.saveRessource(ressource);
-
                 ressources.add(ressource);
             }
 

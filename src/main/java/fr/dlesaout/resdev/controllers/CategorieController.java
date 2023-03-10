@@ -22,7 +22,7 @@ public class CategorieController {
 
     @GetMapping(value = "/all", name = "_all")
     public ResponseEntity<List<Categorie>> allCategories() {
-        return ResponseEntity.ok(categorieService.searchAllCategorie());
+        return ResponseEntity.ok(categorieService.searchAllCategories());
     }
 
     @GetMapping(value = "/{id}", name = "_detail")

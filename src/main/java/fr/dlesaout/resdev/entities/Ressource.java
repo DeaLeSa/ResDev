@@ -1,5 +1,6 @@
 package fr.dlesaout.resdev.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
@@ -23,16 +24,16 @@ public class Ressource {
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "nom")
+    @Column(name = "nom", columnDefinition = "nvarchar(255)")
     private String nom;
 
-    @Column(name = "url")
+    @Column(name = "url", columnDefinition = "nvarchar(255)")
     private String url;
 
-    @Column(name = "description")
+    @Column(name = "description", columnDefinition = "nvarchar(MAX)")
     private String description;
 
-    @Column(name = "utilisation")
+    @Column(name = "utilisation", columnDefinition = "nvarchar(MAX)")
     private String utilisation;
 
     @ManyToMany
@@ -43,6 +44,11 @@ public class Ressource {
     )
     @ToString.Exclude
     private List<Categorie> categories = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "etat_id")
+    @JsonBackReference
+    private Etat etat;
 
     @Override
     public boolean equals(Object o) {
