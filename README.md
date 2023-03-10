@@ -24,6 +24,15 @@ spring.datasource.url=jdbc:sqlserver://localhost:1433;encrypt=true;trustServerCe
 spring.datasource.username=votre_identifiant
 spring.datasource.password=votre_mot_de_passe
 ```
+Dans le fichier `application.properties`, modifiez `spring.jpa.hibernate.ddl-auto=create` en fonction de vos besoins :
+
+:one: `spring.jpa.hibernate.ddl-auto=create`: cette option demande à Hibernate de créer la structure de votre base de données à chaque démarrage de l'application. Cela signifie que toutes les tables, colonnes et contraintes seront supprimées et recréées à chaque fois que l'application est redémarrée. Cette option est souvent utilisée pour les tests de développement ou pour les applications où la structure de la base de données est régulièrement modifiée.
+
+:two: `spring.jpa.hibernate.ddl-auto=create-drop`: cette option demande à Hibernate de créer la structure de votre base de données à chaque démarrage de l'application, mais de la supprimer à la fin de l'exécution. Cela signifie que toutes les tables, colonnes et contraintes seront supprimées lorsque l'application est arrêtée, ce qui peut être utile pour les tests de développement.
+
+:three: `spring.jpa.hibernate.ddl-auto=update`: cette option demande à Hibernate de mettre à jour la structure de votre base de données en fonction des modifications apportées à vos entités. Cela signifie que les nouvelles tables, colonnes et contraintes seront ajoutées à la base de données, tandis que les tables, colonnes et contraintes obsolètes seront supprimées. Cette option est souvent utilisée pour les environnements de production où la structure de la base de données est modifiée de manière régulière et contrôlée.
+
+:four: `spring.jpa.hibernate.ddl-auto=validate`: cette option demande à Hibernate de valider la structure de votre base de données par rapport à vos entités, sans effectuer de modifications. Cela signifie qu'aucune modification ne sera apportée à la base de données, mais que Hibernate vérifiera que la structure de la base de données correspond à vos entités. Cette option est souvent utilisée pour les environnements de production où la structure de la base de données est figée.
 
 ## Utilisation
 
