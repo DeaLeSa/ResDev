@@ -54,6 +54,9 @@ Le projet utilise les dépendances suivantes :
 | CategorieController |	GET	 | /api/v1/categories/all | Récupère toutes les catégories |
 | CategorieController | GET	 | /api/v1/categories/{id} | Récupère une catégorie par son ID |
 | CategorieController	| POST | /api/v1/categories/create | Enregistre une nouvelle catégorie |
+| EtatController | GET	| /api/v1/etats/all | Récupère tous les états |
+| EtatController | GET | /api/v1/etats/{id} | Récupère un état par son ID |
+| EtatController | POST | /api/v1/etats/create | Enregistre un nouvel état |
 
 ## Contributions
 
