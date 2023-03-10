@@ -4,13 +4,12 @@ import fr.dlesaout.resdev.entities.Categorie;
 import fr.dlesaout.resdev.services.CategorieService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
-@Controller
+@RestController
 @RequestMapping(value = "/api/v1/categories", name = "categories")
 public class CategorieController {
 

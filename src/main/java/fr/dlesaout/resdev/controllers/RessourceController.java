@@ -9,7 +9,6 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Controller
+@RestController
 @RequestMapping(value = "/api/v1/ressources", name = "ressources")
 public class RessourceController {
 
@@ -53,6 +52,13 @@ public class RessourceController {
         return ressourceService.deleteRessourceById(id);
     }
 
+    /*
+    Format de fichier .xls ou .xlsx à importer
+    | Catégorie | Nom | URL | Description | Utilisation |
+    | ----------| --- | --- | ----------- | ----------- |
+    | xxx       | xxx | xxx | xxx         | xxx         |
+    | xxx       | xxx | xxx | xxx         | xxx         |
+     */
     @PostMapping(value = "/import-file", name = "_import-file")
     public ResponseEntity<List<Ressource>> importResources(@RequestParam("file") MultipartFile file) {
         try {
