@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface EtatRepository extends JpaRepository<Etat, Integer> {
 
-    public Etat findEtatByNom(String nom);
+    Etat findEtatByNom(String nom);
 
 }

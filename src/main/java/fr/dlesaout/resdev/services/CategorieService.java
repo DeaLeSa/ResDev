@@ -1,9 +1,7 @@
 package fr.dlesaout.resdev.services;
 
 import fr.dlesaout.resdev.entities.Categorie;
-import fr.dlesaout.resdev.entities.Ressource;
 import fr.dlesaout.resdev.repositories.CategorieRepository;
-import fr.dlesaout.resdev.repositories.RessourceRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,7 +26,7 @@ public class CategorieService {
 
     public Optional<Categorie> saveCategorie(Categorie categorie) {
         Categorie newCategorie = categorieRepository.save(categorie);
-        return categorieRepository.findById(categorie.getId());
+        return categorieRepository.findById(newCategorie.getId());
     }
 
 }

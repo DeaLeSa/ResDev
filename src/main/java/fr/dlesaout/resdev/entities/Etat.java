@@ -29,6 +29,7 @@ public class Etat {
 
     @OneToMany(mappedBy = "etat")
     @JsonManagedReference
+    @ToString.Exclude
     private List<Ressource> ressources = new ArrayList<>();
 
     @Override
