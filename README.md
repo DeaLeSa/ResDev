@@ -40,7 +40,7 @@ Afin d'utiliser l'application, il vous faut lancer le serveur local depuis votre
 
 ## Visualisation et test des API REST
 
-Pour visualiser et tester les endepoints, vous pouvez accéder à l'interface graphique Swagger UI via l'URL suivante : `http://localhost:8080/swagger-ui/index.html`.
+Pour visualiser et tester les endpoints, vous pouvez accéder à l'interface graphique Swagger UI via l'URL suivante : `http://localhost:8080/swagger-ui/index.html`.
 
 ## Dépendances
 
