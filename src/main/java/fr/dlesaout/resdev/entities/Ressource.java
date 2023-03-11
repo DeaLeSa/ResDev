@@ -43,6 +43,7 @@ public class Ressource {
             inverseJoinColumns = {@JoinColumn(name = "categorie_id")}
     )
     @ToString.Exclude
+    @JsonBackReference
     private List<Categorie> categories = new ArrayList<>();
 
     @ManyToOne

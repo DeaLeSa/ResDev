@@ -1,9 +1,12 @@
 package fr.dlesaout.resdev.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Getter
@@ -23,6 +26,11 @@ public class Categorie {
 
     @Column(name = "nom", columnDefinition = "nvarchar(255)")
     private String nom;
+
+    @ManyToMany(mappedBy = "categories")
+    @ToString.Exclude
+    @JsonManagedReference
+    private List<Ressource> ressources = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {
