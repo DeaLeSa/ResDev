@@ -27,7 +27,11 @@ spring.datasource.password=votre_mot_de_passe
 
 ## Utilisation
 
-Pour utiliser l'application, lancez le serveur local à partir de l'IDE et accédez à l'adresse `http://localhost:8080`.
+Afin d'utiliser l'application, il vous faut lancer le serveur local depuis votre IDE, puis vous rendre à l'adresse suivante : `http://localhost:8080`.
+
+## Visualisation et test des API REST
+
+Pour visualiser et tester les endepoints, vous pouvez accéder à l'interface graphique Swagger UI via l'URL suivante : `http://localhost:8080/swagger-ui/index.html`.
 
 ## Dépendances
 
@@ -40,23 +44,7 @@ Le projet utilise les dépendances suivantes :
 - Project Lombok pour faciliter l'écriture du code
 - Spring Boot Starter Test pour les tests unitaires
 - Apache POI pour la manipulation des fichiers Excel
-
-## Méthodes
-
-| Classe | Type | URL | Description |
-| --- | --- | --- | --- |
-| RessourceController | GET  | /api/v1/ressources/all | Récupère toutes les ressources |
-| RessourceController | GET  | /api/v1/ressources/{id} | Récupère une ressource par son ID |
-| RessourceController | POST | /api/v1/ressources/create | Enregistre une nouvelle ressource |
-| RessourceController | POST | /api/v1/ressources/update/{id} | Met à jour une ressource existante |
-| RessourceController | POST | /api/v1/ressources/delete/{id} | Supprime une ressource existante |
-| RessourceController | POST | /api/v1/ressources/import-file | Importe une liste de ressources depuis un fichier Excel |
-| CategorieController |	GET	 | /api/v1/categories/all | Récupère toutes les catégories |
-| CategorieController | GET	 | /api/v1/categories/{id} | Récupère une catégorie par son ID |
-| CategorieController	| POST | /api/v1/categories/create | Enregistre une nouvelle catégorie |
-| EtatController | GET	| /api/v1/etats/all | Récupère tous les états |
-| EtatController | GET | /api/v1/etats/{id} | Récupère un état par son ID |
-| EtatController | POST | /api/v1/etats/create | Enregistre un nouvel état |
+- Springdoc-OpenAPI pour générer une spécification OpenAPI de l'API RESTful de l'application
 
 ## Contributions
 
