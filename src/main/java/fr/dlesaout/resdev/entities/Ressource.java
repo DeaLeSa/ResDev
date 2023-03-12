@@ -36,6 +36,13 @@ public class Ressource {
     private String utilisation;
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(
+            name = "utilisateur_id",
+            referencedColumnName = "id",
+            nullable = false)
+    private Utilisateur utilisateur;
+
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "etat_id", referencedColumnName = "id")
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Etat etat;

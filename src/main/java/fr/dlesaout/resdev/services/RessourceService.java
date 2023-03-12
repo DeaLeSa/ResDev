@@ -1,10 +1,9 @@
 package fr.dlesaout.resdev.services;
 
-import fr.dlesaout.resdev.entities.Categorie;
-import fr.dlesaout.resdev.entities.Etat;
-import fr.dlesaout.resdev.entities.Ressource;
+import fr.dlesaout.resdev.entities.*;
 import fr.dlesaout.resdev.repositories.RessourceRepository;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,6 +45,7 @@ public class RessourceService {
 
     @Transactional
     public ResponseEntity<Ressource> saveRessource(Ressource ressource) {
+
         if (
                 ressource == null
                         || ressource.getNom().length() > 255
@@ -56,6 +56,8 @@ public class RessourceService {
             return ResponseEntity.badRequest().build();
         }
 
+        Utilisateur author = (Utilisateur) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
         Ressource newRessource = Ressource.builder()
                 .nom(ressource.getNom())
                 .url(ressource.getUrl())
@@ -63,6 +65,7 @@ public class RessourceService {
                 .utilisation(ressource.getUtilisation())
                 .categories(ressource.getCategories())
                 .etat(ressource.getEtat())
+                .utilisateur(author)
                 .build();
 
         ressourceRepository.save(newRessource);
@@ -71,18 +74,23 @@ public class RessourceService {
 
     @Transactional
     public ResponseEntity<Ressource> updateRessource(Integer id, Ressource ressource) {
+
         Optional<Ressource> ressourceToUpdate = ressourceRepository.findById(id);
-        if (ressourceToUpdate.isEmpty() || ressource == null) {
+        if (
+                ressourceToUpdate.isEmpty()
+                        || ressource == null
+                        || !ressourceToUpdate.get().getUtilisateur().equals(SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+        ) {
             return ResponseEntity.badRequest().build();
         }
-        Ressource updatedRessource = Ressource.builder()
-                .id(id)
-                .nom(ressource.getNom())
-                .url(ressource.getUrl())
-                .description(ressource.getDescription())
-                .utilisation(ressource.getUtilisation())
-                .build();
-        Ressource savedRessource = ressourceRepository.save(updatedRessource);
+
+        ressourceToUpdate.get().setNom(ressource.getNom());
+        ressourceToUpdate.get().setUrl(ressource.getUrl());
+        ressourceToUpdate.get().setDescription(ressource.getDescription());
+        ressourceToUpdate.get().setUtilisation(ressource.getUtilisation());
+        ressourceToUpdate.get().setCategories(ressource.getCategories());
+
+        Ressource savedRessource = ressourceRepository.save(ressourceToUpdate.get());
         return ResponseEntity.ok(savedRessource);
     }
 
