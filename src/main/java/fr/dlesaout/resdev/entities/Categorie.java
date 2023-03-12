@@ -1,6 +1,6 @@
 package fr.dlesaout.resdev.entities;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
@@ -14,7 +14,6 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ToString
 @Table(name = "categories")
 @Entity
 public class Categorie {
@@ -27,9 +26,11 @@ public class Categorie {
     @Column(name = "nom", columnDefinition = "nvarchar(255)")
     private String nom;
 
-    @ManyToMany(mappedBy = "categories")
-    @ToString.Exclude
-    @JsonManagedReference
+    @ManyToMany(
+            mappedBy = "categories",
+            fetch = FetchType.EAGER,
+            targetEntity = Ressource.class)
+    @JsonIgnore
     private List<Ressource> ressources = new ArrayList<>();
 
     @Override
@@ -43,5 +44,12 @@ public class Categorie {
     @Override
     public int hashCode() {
         return getClass().hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "(" +
+                "id = " + id + ", " +
+                "nom = " + nom + ")";
     }
 }

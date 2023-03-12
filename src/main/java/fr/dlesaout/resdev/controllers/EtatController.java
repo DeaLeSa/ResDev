@@ -2,6 +2,7 @@ package fr.dlesaout.resdev.controllers;
 
 import fr.dlesaout.resdev.entities.Etat;
 import fr.dlesaout.resdev.services.EtatService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +21,7 @@ public class EtatController {
 
     @GetMapping(value = "/all", name = "_all")
     public ResponseEntity<List<Etat>> allEtats() {
-        return etatService.searchAllEtats();
+        return ResponseEntity.ok(etatService.searchAllEtats());
     }
 
     @GetMapping(value = "/{id}", name = "_detail")
@@ -29,8 +30,9 @@ public class EtatController {
     }
 
     @PostMapping(value = "/create", name = "_create")
-    public ResponseEntity<Etat> saveEtat(@RequestBody Etat etat) {
-        return etatService.saveEtat(etat);
+    public ResponseEntity<Optional<Etat>> saveCategorie(@RequestBody Etat etat) {
+        Optional<Etat> savedEtat = etatService.saveEtat(etat);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedEtat);
     }
 
 }

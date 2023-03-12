@@ -5,6 +5,7 @@ import fr.dlesaout.resdev.repositories.EtatRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,12 +18,12 @@ public class EtatService {
         this.etatRepository = etatRepository;
     }
 
-    public ResponseEntity<List<Etat>> searchAllEtats() {
+    public List<Etat> searchAllEtats() {
         List<Etat> etats = etatRepository.findAll();
         if (etats.isEmpty()) {
-            return ResponseEntity.noContent().build();
+            return Collections.emptyList();
         }
-        return ResponseEntity.ok(etats);
+        return etats;
     }
 
     public ResponseEntity<Optional<Etat>> searchEtatById(Integer id) {
@@ -33,14 +34,9 @@ public class EtatService {
         return ResponseEntity.ok(etat);
     }
 
-    public ResponseEntity<Etat> saveEtat(Etat etat) {
-        if(
-                etat == null
-                || etat.getNom().isEmpty()
-        ) {
-            return ResponseEntity.badRequest().build();
-        }
+    public Optional<Etat> saveEtat(Etat etat) {
         Etat newEtat = etatRepository.save(etat);
-        return ResponseEntity.ok(newEtat);
+        return etatRepository.findById(newEtat.getId());
     }
+
 }

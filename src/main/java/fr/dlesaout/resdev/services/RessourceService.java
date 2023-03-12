@@ -1,8 +1,8 @@
 package fr.dlesaout.resdev.services;
 
+import fr.dlesaout.resdev.entities.Categorie;
 import fr.dlesaout.resdev.entities.Etat;
 import fr.dlesaout.resdev.entities.Ressource;
-import fr.dlesaout.resdev.repositories.EtatRepository;
 import fr.dlesaout.resdev.repositories.RessourceRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -15,12 +15,9 @@ import java.util.Optional;
 public class RessourceService {
 
     private final RessourceRepository ressourceRepository;
-    private final EtatRepository etatRepository;
 
-    public RessourceService(RessourceRepository ressourceRepository,
-                            EtatRepository etatRepository) {
+    public RessourceService(RessourceRepository ressourceRepository) {
         this.ressourceRepository = ressourceRepository;
-        this.etatRepository = etatRepository;
     }
 
     public ResponseEntity<List<Ressource>> searchAllRessources() {
@@ -39,6 +36,14 @@ public class RessourceService {
         return ResponseEntity.ok(ressource);
     }
 
+    public List<Ressource> searchRessourcesByEtat(Etat etat) {
+        return ressourceRepository.findAllByEtat(etat);
+    }
+
+    public List<Ressource> searchRessourcesByCategories(List<Categorie> categories) {
+        return ressourceRepository.findAllByCategoriesIn(categories);
+    }
+
     @Transactional
     public ResponseEntity<Ressource> saveRessource(Ressource ressource) {
         if (
@@ -47,7 +52,6 @@ public class RessourceService {
                         || ressource.getUrl().length() > 255
                         || ressource.getDescription().length() > 1000
                         || ressource.getUtilisation().length() > 1000
-                        || ressource.getCategories() == null
         ) {
             return ResponseEntity.badRequest().build();
         }
@@ -58,10 +62,8 @@ public class RessourceService {
                 .description(ressource.getDescription())
                 .utilisation(ressource.getUtilisation())
                 .categories(ressource.getCategories())
+                .etat(ressource.getEtat())
                 .build();
-
-        Optional<Etat> defaultEtat = Optional.ofNullable(etatRepository.findEtatByNom("Enregistrée"));
-        defaultEtat.ifPresent(newRessource::setEtat);
 
         ressourceRepository.save(newRessource);
         return ResponseEntity.ok(newRessource);
@@ -79,8 +81,6 @@ public class RessourceService {
                 .url(ressource.getUrl())
                 .description(ressource.getDescription())
                 .utilisation(ressource.getUtilisation())
-                .categories(ressource.getCategories())
-                .etat(ressource.getEtat())
                 .build();
         Ressource savedRessource = ressourceRepository.save(updatedRessource);
         return ResponseEntity.ok(savedRessource);

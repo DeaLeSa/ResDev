@@ -1,6 +1,7 @@
 package fr.dlesaout.resdev.controllers;
 
 import fr.dlesaout.resdev.entities.Categorie;
+import fr.dlesaout.resdev.entities.Etat;
 import fr.dlesaout.resdev.entities.Ressource;
 import fr.dlesaout.resdev.services.RessourceService;
 import org.apache.poi.ss.usermodel.Row;
@@ -23,7 +24,9 @@ public class RessourceController {
 
     private final RessourceService ressourceService;
 
-    public RessourceController(RessourceService ressourceService) {
+    public RessourceController(
+            RessourceService ressourceService
+    ) {
         this.ressourceService = ressourceService;
     }
 
@@ -35,6 +38,20 @@ public class RessourceController {
     @GetMapping(value = "/{id}", name = "_detail")
     public ResponseEntity<Optional<Ressource>> ressourceById(@PathVariable Integer id) {
         return ressourceService.searchRessourceById(id);
+    }
+
+    @GetMapping(value = "/etat", name = "_etat")
+    public ResponseEntity<List<Ressource>> getRessourcesByEtat(@RequestParam Etat etat) {
+        return ResponseEntity.ok(ressourceService.searchRessourcesByEtat(etat));
+    }
+
+    @GetMapping(value = "/categories", name = "_categories")
+    public ResponseEntity<List<Ressource>> getRessourcesByCategories(@RequestParam List<Categorie> categories) {
+        List<Ressource> ressources = ressourceService.searchRessourcesByCategories(categories);
+        if (ressources.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(ressources);
     }
 
     @PostMapping(value = "/create", name = "_create")
@@ -63,7 +80,6 @@ public class RessourceController {
     public ResponseEntity<List<Ressource>> importResources(@RequestParam("file") MultipartFile file) {
         try {
             List<Ressource> ressources = new ArrayList<>();
-            List<Categorie> categories = new ArrayList<>();
 
             // Utilise Apache POI pour lire le contenu du fichier Excel
             Workbook workbook = WorkbookFactory.create(file.getInputStream());
@@ -77,7 +93,6 @@ public class RessourceController {
                         .url(row.getCell(2).getStringCellValue())
                         .description(row.getCell(3).getStringCellValue())
                         .utilisation(row.getCell(4).getStringCellValue())
-                        .categories(categories)
                         .build();
                 System.out.println(ressource);
 

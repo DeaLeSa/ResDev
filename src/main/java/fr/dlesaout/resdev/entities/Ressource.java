@@ -1,6 +1,6 @@
 package fr.dlesaout.resdev.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
@@ -14,7 +14,6 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ToString
 @Table(name = "ressources")
 @Entity
 public class Ressource {
@@ -36,20 +35,17 @@ public class Ressource {
     @Column(name = "utilisation", columnDefinition = "nvarchar(MAX)")
     private String utilisation;
 
-    @ManyToMany
-    @JoinTable(
-            name = "ressources_categories",
-            joinColumns = {@JoinColumn(name = "ressource_id")},
-            inverseJoinColumns = {@JoinColumn(name = "categorie_id")}
-    )
-    @ToString.Exclude
-    @JsonBackReference
-    private List<Categorie> categories = new ArrayList<>();
-
-    @ManyToOne
-    @JoinColumn(name = "etat_id")
-    @JsonBackReference
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "etat_id", referencedColumnName = "id")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Etat etat;
+
+    @ManyToMany(fetch = FetchType.EAGER, targetEntity = Categorie.class)
+    @JoinTable(name = "ressources_categories",
+            joinColumns = {@JoinColumn(name = "ressource_id")},
+            inverseJoinColumns = {@JoinColumn(name = "categorie_id")})
+    @JsonProperty("categories")
+    private List<Categorie> categories = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {
@@ -62,5 +58,15 @@ public class Ressource {
     @Override
     public int hashCode() {
         return getClass().hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "(" +
+                "id = " + id + ", " +
+                "nom = " + nom + ", " +
+                "url = " + url + ", " +
+                "description = " + description + ", " +
+                "utilisation = " + utilisation + ")";
     }
 }
