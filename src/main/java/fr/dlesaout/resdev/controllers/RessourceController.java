@@ -31,12 +31,12 @@ public class RessourceController {
     }
 
     @GetMapping(value = "/all", name = "_all")
-    public ResponseEntity<List<Ressource>> allRessources() {
+    public ResponseEntity<List<Ressource>> getAllRessources() {
         return ressourceService.searchAllRessources();
     }
 
     @GetMapping(value = "/{id}", name = "_detail")
-    public ResponseEntity<Optional<Ressource>> ressourceById(@PathVariable Integer id) {
+    public ResponseEntity<Optional<Ressource>> getRessourceById(@PathVariable Integer id) {
         return ressourceService.searchRessourceById(id);
     }
 
@@ -77,7 +77,7 @@ public class RessourceController {
     | xxx       | xxx | xxx | xxx         | xxx         |
      */
     @PostMapping(value = "/import-file", name = "_import-file")
-    public ResponseEntity<List<Ressource>> importResources(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<List<Ressource>> importRessources(@RequestParam("file") MultipartFile file) {
         try {
             List<Ressource> ressources = new ArrayList<>();
 
