@@ -32,41 +32,45 @@ public class RessourceController {
 
     @GetMapping(value = "/all", name = "_all")
     public ResponseEntity<List<Ressource>> getAllRessources() {
-        return ressourceService.searchAllRessources();
+        return Optional.ofNullable(ressourceService.searchAllRessources())
+                .map(ressources -> new ResponseEntity<>(ressources, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(HttpStatus.NO_CONTENT));
     }
 
     @GetMapping(value = "/{id}", name = "_detail")
     public ResponseEntity<Optional<Ressource>> getRessourceById(@PathVariable Integer id) {
-        return ressourceService.searchRessourceById(id);
+        return Optional.ofNullable(ressourceService.searchRessourceById(id))
+                .map(ressource -> new ResponseEntity<>(ressource, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(HttpStatus.NO_CONTENT));
     }
 
     @GetMapping(value = "/etat", name = "_etat")
     public ResponseEntity<List<Ressource>> getRessourcesByEtat(@RequestParam Etat etat) {
-        return ResponseEntity.ok(ressourceService.searchRessourcesByEtat(etat));
+        return Optional.ofNullable(ressourceService.searchRessourcesByEtat(etat))
+                .map(ressources -> new ResponseEntity<>(ressources, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(HttpStatus.NO_CONTENT));
     }
 
     @GetMapping(value = "/categories", name = "_categories")
     public ResponseEntity<List<Ressource>> getRessourcesByCategories(@RequestParam List<Categorie> categories) {
-        List<Ressource> ressources = ressourceService.searchRessourcesByCategories(categories);
-        if (ressources.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(ressources);
+        return Optional.ofNullable(ressourceService.searchRessourcesByCategories(categories))
+                .map(ressources -> new ResponseEntity<>(ressources, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(HttpStatus.NO_CONTENT));
     }
 
     @PostMapping(value = "/create", name = "_create")
     public ResponseEntity<Ressource> saveRessource(@RequestBody Ressource ressource) {
-        return ressourceService.saveRessource(ressource);
+        return ResponseEntity.ok(ressourceService.saveRessource(ressource));
     }
 
     @PostMapping(value = "/update/{id}", name = "_update")
     public ResponseEntity<Ressource> updateRessource(@PathVariable Integer id, @RequestBody Ressource ressource) {
-        return ressourceService.updateRessource(id, ressource);
+        return ResponseEntity.ok(ressourceService.updateRessource(id, ressource));
     }
 
     @PostMapping(value = "/delete/{id}", name = "_delete")
     public ResponseEntity<Integer> updateRessource(@PathVariable Integer id) {
-        return ressourceService.deleteRessourceById(id);
+        return ResponseEntity.ok(ressourceService.deleteRessourceById(id));
     }
 
     /*

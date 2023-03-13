@@ -19,12 +19,14 @@ public class ApplicationConfig {
 
     private final UtilisateurRepository utilisateurRepository;
 
+    // Configuration d'un UserDetailsService pour charger les détails de l'utilisateur à partir de la base de données
     @Bean
     public UserDetailsService userDetailsService() {
         return username -> utilisateurRepository.findUtilisateurByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Utilisateur non trouvé"));
     }
 
+    // Configuration d'un AuthenticationProvider qui utilise le UserDetailsService et le PasswordEncoder
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
@@ -33,11 +35,13 @@ public class ApplicationConfig {
         return authProvider;
     }
 
+    // Configuration de l'AuthenticationManager en utilisant la configuration d'authentification fournie par Spring Security
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
 
+    // Configuration d'un PasswordEncoder pour encoder les mots de passe des utilisateurs dans la base de données
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
