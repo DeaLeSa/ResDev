@@ -15,7 +15,9 @@ Pour installer le projet, clonez le repository. Il est également nécessaire de
 
 ## Base de données
 
-Le projet nécessite la création d'un fichier `database.properties` à la racine du projet comprenant les informations de connexion à la base de données.
+Le projet nécessite la création d'un fichier `database.properties` dans le dossier ressources, comprenant les informations de connexion à la base de données.
+
+![application.properties](/assets/images/ressources-files.png)
 
 Voici le contenu du fichier `database.properties` :
 
@@ -36,7 +38,9 @@ Dans le fichier `application.properties`, modifiez `spring.jpa.hibernate.ddl-aut
 
 ## JSON Web Token
 
-Le projet nécessite la création d'un fichier `jwt.properties` à la racine du projet contenant votre clé secrète. La création d'une clé secrète vise à s'assurer que le jeton n'a pas été altéré de manière malveillante en transit et à garantir l'intégrité du jeton.
+Le projet nécessite la création d'un fichier `jwt.properties` dans le dossier ressources contenant votre clé secrète. La création d'une clé secrète vise à s'assurer que le jeton n'a pas été altéré de manière malveillante en transit et à garantir l'intégrité du jeton.
+
+![application.properties](/assets/images/ressources-files.png)
 
 Voici le contenu du fichier `jwt.properties` :
 
