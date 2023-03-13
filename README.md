@@ -36,7 +36,7 @@ Dans le fichier `application.properties`, modifiez `spring.jpa.hibernate.ddl-aut
 
 ## JSON Web Token
 
-Le projet nécessite la création d'un fichier `jwt.properties` à la racine du projet contenant votre clé secrète. La création d'une clé secrète vise à s'assurer que le jeton n'a pas été altéré de manière malveillante en transit et pour garantir l'intégrité du jeton.
+Le projet nécessite la création d'un fichier `jwt.properties` à la racine du projet contenant votre clé secrète. La création d'une clé secrète vise à s'assurer que le jeton n'a pas été altéré de manière malveillante en transit et à garantir l'intégrité du jeton.
 
 Voici le contenu du fichier `jwt.properties` :
 
