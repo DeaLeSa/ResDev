@@ -15,7 +15,7 @@ Pour installer le projet, clonez le repository. Il est également nécessaire de
 
 ## Base de données
 
-Le projet nécessite la création d'un fichier `database.properties` à la racine du projet avec les informations de connexion à la base de données.
+Le projet nécessite la création d'un fichier `database.properties` à la racine du projet comprenant les informations de connexion à la base de données.
 
 Voici le contenu du fichier `database.properties` :
 
@@ -33,6 +33,17 @@ Dans le fichier `application.properties`, modifiez `spring.jpa.hibernate.ddl-aut
 :three: `spring.jpa.hibernate.ddl-auto=update`: cette option demande à Hibernate de mettre à jour la structure de votre base de données en fonction des modifications apportées à vos entités. Cela signifie que les nouvelles tables, colonnes et contraintes seront ajoutées à la base de données, tandis que les tables, colonnes et contraintes obsolètes seront supprimées. Cette option est souvent utilisée pour les environnements de production où la structure de la base de données est modifiée de manière régulière et contrôlée.
 
 :four: `spring.jpa.hibernate.ddl-auto=validate`: cette option demande à Hibernate de valider la structure de votre base de données par rapport à vos entités, sans effectuer de modifications. Cela signifie qu'aucune modification ne sera apportée à la base de données, mais que Hibernate vérifiera que la structure de la base de données correspond à vos entités. Cette option est souvent utilisée pour les environnements de production où la structure de la base de données est figée.
+
+## JSON Web Token
+
+Le projet nécessite la création d'un fichier `jwt.properties` à la racine du projet contenant votre clé secrète. La création d'une clé secrète vise à s'assurer que le jeton n'a pas été altéré de manière malveillante en transit et pour garantir l'intégrité du jeton.
+
+Voici le contenu du fichier `jwt.properties` :
+
+```
+APP_JWT_SECRET=votre_cle_secrete
+```
+Vous pouvez générer une clé secrète via l'outil en ligne [Encryption Key Generator](https://www.allkeysgenerator.com/Random/Security-Encryption-Key-Generator.aspx)
 
 ## Utilisation
 
