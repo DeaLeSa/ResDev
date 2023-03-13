@@ -2,9 +2,9 @@ package fr.dlesaout.resdev.services;
 
 import fr.dlesaout.resdev.entities.Role;
 import fr.dlesaout.resdev.entities.Utilisateur;
-import fr.dlesaout.resdev.exceptions.utilisateur.EchecEnregistrementUtilisateurException;
-import fr.dlesaout.resdev.exceptions.utilisateur.EmailExisteDejaException;
-import fr.dlesaout.resdev.exceptions.utilisateur.MotDePasseException;
+import fr.dlesaout.resdev.exceptions.utilisateur.UserRegistrationFailedException;
+import fr.dlesaout.resdev.exceptions.utilisateur.EmailAlreadyExistsException;
+import fr.dlesaout.resdev.exceptions.utilisateur.PasswordInputErrorException;
 import fr.dlesaout.resdev.exceptions.utilisateur.UserNotFoundException;
 import fr.dlesaout.resdev.repositories.UtilisateurRepository;
 import org.springframework.http.ResponseEntity;
@@ -64,12 +64,12 @@ public class UtilisateurService {
 
         Optional<Utilisateur> utilisateurExistant = utilisateurRepository.findUtilisateurByEmail(utilisateur.getEmail());
         if (utilisateurExistant.isPresent()) {
-            throw new EmailExisteDejaException("Un compte a déjà été créé avec cette adresse email.");
+            throw new EmailAlreadyExistsException("Un compte a déjà été créé avec cette adresse email.");
         }
 
         String PATTERN_MOT_DE_PASSE = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,20}$";
         if(motDePasse.length()<8 && !motDePasse.contains(PATTERN_MOT_DE_PASSE)) {
-            throw new MotDePasseException();
+            throw new PasswordInputErrorException();
         }
 
         Utilisateur newUtilisateur = Utilisateur.builder()
@@ -89,7 +89,7 @@ public class UtilisateurService {
             utilisateurRepository.save(newUtilisateur);
         } catch (Exception e) {
             System.out.println(newUtilisateur.toString());
-            throw new EchecEnregistrementUtilisateurException();
+            throw new UserRegistrationFailedException();
         }
 
         return ResponseEntity.ok(newUtilisateur);

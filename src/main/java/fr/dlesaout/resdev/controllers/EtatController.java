@@ -25,8 +25,8 @@ public class EtatController {
     }
 
     @GetMapping(value = "/{id}", name = "_detail")
-    public ResponseEntity<Optional<Etat>> etatById(@PathVariable Integer id) {
-        return etatService.searchEtatById(id);
+    public ResponseEntity<Etat> etatById(@PathVariable Integer id) {
+        return ResponseEntity.ok(etatService.searchEtatById(id));
     }
 
     @PostMapping(value = "/create", name = "_create")

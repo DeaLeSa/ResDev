@@ -1,8 +1,8 @@
 package fr.dlesaout.resdev.exceptions.utilisateur;
 
-public class MotDePasseException extends RuntimeException {
+public class PasswordInputErrorException extends RuntimeException {
 
-    public MotDePasseException() {
+    public PasswordInputErrorException() {
         super("Le mot de passe saisi ne respecte pas la politique de sécurisation des mots de passe");
     }
 

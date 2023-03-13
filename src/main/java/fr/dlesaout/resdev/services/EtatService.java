@@ -1,6 +1,7 @@
 package fr.dlesaout.resdev.services;
 
 import fr.dlesaout.resdev.entities.Etat;
+import fr.dlesaout.resdev.exceptions.etat.EtatNotFoundException;
 import fr.dlesaout.resdev.repositories.EtatRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -26,12 +27,9 @@ public class EtatService {
         return etats;
     }
 
-    public ResponseEntity<Optional<Etat>> searchEtatById(Integer id) {
-        Optional<Etat> etat = etatRepository.findById(id);
-        if (etat.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(etat);
+    public Etat searchEtatById(Integer id) {
+        return etatRepository.findById(id)
+                .orElseThrow(() -> new EtatNotFoundException("L'état avec l'ID " + id + " n'a pas été trouvé."));
     }
 
     public Optional<Etat> saveEtat(Etat etat) {

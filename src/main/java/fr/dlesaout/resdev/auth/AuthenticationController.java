@@ -14,14 +14,14 @@ public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
 
-    @PostMapping("/inscription")
+    @PostMapping(value = "/register", name = "_register")
     public ResponseEntity<AuthenticationResponse> inscription(
             @RequestBody RegisterRequest request
     ) {
         return ResponseEntity.ok(authenticationService.inscription(request));
     }
 
-    @PostMapping("/connexion")
+    @PostMapping(value = "/login", name = "_login")
     public ResponseEntity<AuthenticationResponse> inscription(
             @RequestBody AuthenticationRequest request
     ) {

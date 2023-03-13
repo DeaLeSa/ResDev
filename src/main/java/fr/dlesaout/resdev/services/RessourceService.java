@@ -1,7 +1,12 @@
 package fr.dlesaout.resdev.services;
 
 import fr.dlesaout.resdev.entities.*;
+import fr.dlesaout.resdev.exceptions.ressource.BadRequestException;
+import fr.dlesaout.resdev.exceptions.ressource.RessourceAlreadyExistsException;
+import fr.dlesaout.resdev.exceptions.ressource.RessourceNotFoundException;
 import fr.dlesaout.resdev.repositories.RessourceRepository;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -19,20 +24,20 @@ public class RessourceService {
         this.ressourceRepository = ressourceRepository;
     }
 
-    public ResponseEntity<List<Ressource>> searchAllRessources() {
+    public List<Ressource> searchAllRessources() {
         List<Ressource> ressources = ressourceRepository.findAll();
         if (ressources.isEmpty()) {
-            return ResponseEntity.noContent().build();
+            throw new RessourceNotFoundException("Aucune ressource trouvée.");
         }
-        return ResponseEntity.ok(ressources);
+        return ressources;
     }
 
-    public ResponseEntity<Optional<Ressource>> searchRessourceById(Integer id) {
+    public Optional<Ressource> searchRessourceById(Integer id) {
         Optional<Ressource> ressource = ressourceRepository.findById(id);
         if (ressource.isEmpty()) {
-            return ResponseEntity.noContent().build();
+            throw new RessourceNotFoundException("La ressource " + id + " n'existe pas.");
         }
-        return ResponseEntity.ok(ressource);
+        return ressource;
     }
 
     public List<Ressource> searchRessourcesByEtat(Etat etat) {
@@ -44,8 +49,7 @@ public class RessourceService {
     }
 
     @Transactional
-    public ResponseEntity<Ressource> saveRessource(Ressource ressource) {
-
+    public Ressource saveRessource(Ressource ressource) {
         if (
                 ressource == null
                         || ressource.getNom().length() > 255
@@ -53,11 +57,9 @@ public class RessourceService {
                         || ressource.getDescription().length() > 1000
                         || ressource.getUtilisation().length() > 1000
         ) {
-            return ResponseEntity.badRequest().build();
+            throw new BadRequestException("Les données envoyées en paramètre ne respectent pas le format attendu.");
         }
-
         Utilisateur author = (Utilisateur) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
         Ressource newRessource = Ressource.builder()
                 .nom(ressource.getNom())
                 .url(ressource.getUrl())
@@ -67,42 +69,38 @@ public class RessourceService {
                 .etat(ressource.getEtat())
                 .utilisateur(author)
                 .build();
-
+        Optional<Ressource> existingRessource = ressourceRepository.findRessourceByUrl(ressource.getUrl());
+        if (existingRessource.isPresent()) {
+            throw new RessourceAlreadyExistsException("Cette url est déjà associée à une ressource.");
+        }
         ressourceRepository.save(newRessource);
-        return ResponseEntity.ok(newRessource);
+        return newRessource;
     }
 
     @Transactional
-    public ResponseEntity<Ressource> updateRessource(Integer id, Ressource ressource) {
-
-        Optional<Ressource> ressourceToUpdate = ressourceRepository.findById(id);
-        if (
-                ressourceToUpdate.isEmpty()
-                        || ressource == null
-                        || !ressourceToUpdate.get().getUtilisateur().equals(SecurityContextHolder.getContext().getAuthentication().getPrincipal())
-        ) {
-            return ResponseEntity.badRequest().build();
+    public Ressource updateRessource(Integer id, Ressource ressource) {
+        Ressource ressourceToUpdate = ressourceRepository.findById(id)
+                .orElseThrow(() -> new BadRequestException("Les données envoyées en paramètre ne respectent pas le format attendu."));
+        if (!ressourceToUpdate.getUtilisateur().equals(SecurityContextHolder.getContext().getAuthentication().getPrincipal())) {
+            throw new BadRequestException("Les données envoyées en paramètre ne respectent pas le format attendu.");
         }
-
-        ressourceToUpdate.get().setNom(ressource.getNom());
-        ressourceToUpdate.get().setUrl(ressource.getUrl());
-        ressourceToUpdate.get().setDescription(ressource.getDescription());
-        ressourceToUpdate.get().setUtilisation(ressource.getUtilisation());
-        ressourceToUpdate.get().setCategories(ressource.getCategories());
-
-        Ressource savedRessource = ressourceRepository.save(ressourceToUpdate.get());
-        return ResponseEntity.ok(savedRessource);
+        ressourceToUpdate.setNom(ressource.getNom());
+        ressourceToUpdate.setUrl(ressource.getUrl());
+        ressourceToUpdate.setDescription(ressource.getDescription());
+        ressourceToUpdate.setUtilisation(ressource.getUtilisation());
+        ressourceToUpdate.setCategories(ressource.getCategories());
+        ressourceRepository.findRessourceByUrl(ressource.getUrl())
+                .ifPresent(r -> { throw new RessourceAlreadyExistsException("Cette url est déjà associée à une ressource."); });
+        return ressourceRepository.save(ressourceToUpdate);
     }
 
-    @Transactional
-    public ResponseEntity<Integer> deleteRessourceById(Integer id) {
-        Integer numberOfDeletedRows = 0;
-        Optional<Ressource> ressourceToDelete = ressourceRepository.findById(id);
-        if (ressourceToDelete.isPresent()) {
-            ressourceRepository.deleteById(ressourceToDelete.get().getId());
-            numberOfDeletedRows++;
+    public Integer deleteRessourceById(Integer id) {
+        try {
+            ressourceRepository.deleteById(id);
+            return 1;
+        } catch (EmptyResultDataAccessException e) {
+            return 0;
         }
-        return ResponseEntity.ok(numberOfDeletedRows);
     }
 
 }
